@@ -95,11 +95,15 @@
     ];
 
     const pantun = [
-        "Ikan hiu makan tomat, ini uang kas biar selamat.",
-        "Makan bakso pake cuka, bayar kas hati pun suka.",
-        "Jalan-jalan ke Maluku, bayar kas jangan nunggu laku.",
-        "Beli kain warna biru, bayar kas jangan nunggu diserbu.",
-        "Burung nuri burung dara, ini kas aku wahai bendahara."
+        "Ikan hiu makan tomat, ini uang kas biar selamat *dari bendahara",
+        "Nonton TV acaranya asyik, ini setoran kas aku biar Bendahara gak berisik hehehe.",
+        "Ke sekolah bawa penggaris, lunas yaaa Tolong namaku dihapus dari daftar tagihan :v.",
+        "Beli kado isinya topi, ini uang kasnya biar pembukuan Bendahara tetap rapi uhuyyy.",
+        "Ada udang di balik batu, ini bukti bayar aku mumpung masih ada waktu, (bendahara nngejar)",
+        "Makan nasi lauknya ikan, kewajiban kas sudah aku laksanakan AZZZEEEK.",
+        "Beli pulpen warnanya ungu, ini setoranku biar Bendahara gak lama menunggu *khem khemmm*.",
+        "Jalan-jalan ke kota Tua, ini bukti bayar demi kelancaran kelas kita semua. HAHAHA",
+        "Makan mangga di atas meja, ini bukti transfernya ya, silakan dicek ajaaa"
     ];
 
     const sel = document.getElementById('pilihNama');
@@ -127,7 +131,7 @@
             
             // MEMILIH PANTUN ACAK
             const pantunAcak = pantun[Math.floor(Math.random() * pantun.length)];
-            const pesan = `Halo Bendahara! Nama saya ${p.n}. ${pantunAcak} Cek bukti transfernya ya!`;
+            const pesan = `Halo Bendaharaaa Nama saya ${p.n}. ${pantunAcak} Cek bukti transfernya yawww!`;
             btnWa.href = `https://wa.me/6283841495405?text=${encodeURIComponent(pesan)}`;
             btnWa.style.display = 'flex';
         }
@@ -143,6 +147,7 @@
 </script>
 </body>
 </html>
+
 
 
 
