@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Uang Kas Kelas</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- BAGIAN CSS (Gaya Visual) --- */
+        :root {
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #0f172a;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        header .logo { font-size: 50px; margin-bottom: 10px; }
+        header h1 { font-weight: 800; font-size: 24px; letter-spacing: -1px; margin: 0; color: #38bdf8; }
+        header p { color: #94a3b8; font-size: 14px; margin-top: 5px; }
+
+        .content { margin-top: 30px; }
+
+        .input-box { text-align: left; margin-bottom: 15px; }
+        .input-box label { font-size: 12px; color: #3b82f6; font-weight: 600; text-transform: uppercase; margin-left: 5px; }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            margin-top: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-cek {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-cek:hover { transform: scale(1.02); background: #2563eb; }
+
+        .card {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 16px;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .lunas { 
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid var(--success); 
+            color: #6ee7b7; 
+        }
+        
+        .tagihan { 
+            background: rgba(239, 68, 68, 0.1); 
+            border: 1px solid var(--danger); 
+            color: #fca5a5; 
+        }
+
+        .card h2 { font-size: 32px; margin: 10px 0; font-weight: 800; }
+        .card .nama-mhs { font-size: 16px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: white; }
+
+        footer { margin-top: 40px; font-size: 11px; color: #64748b; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        <header>
+            <div class="logo">💎</div>
+            <h1>KAS INFORMATIKA</h1>
+            <p>Sistem Informasi Tagihan Kelas</p>
+        </header>
+
+        <main class="content">
+            <div class="input-box">
+                <label>Pilih Nama Mahasiswa</label>
+                <select id="pilihNama">
+                    <option value="">-- Cari Nama --</option>
+                </select>
+            </div>
+            <button onclick="cekTagihan()" class="btn-cek">LIHAT STATUS</button>
+
+            <div id="hasil"></div>
+        </main>
+
+        <footer>
+            <p>© 2026 Bendahara Kelas • Managed with Netlify</p>
+        </footer>
+    </div>
+
+    <script>
+        /* --- BAGIAN JAVASCRIPT (Logika & Data) --- */
+        const dataMhs = [
+            { nama: "ABDUL FATAH", defisit: 6000 },
+            { nama: "ADIT SHAPRIZAL", defisit: 6000 },
+            { nama: "AFRILIA NUR FADHILA", defisit: 2000 },
+            { nama: "ALIYA FEBRIYANTI", defisit: 8000 },
+            { nama: "ARINADIHHAQ MUARIFIN", defisit: 12000 },
+            { nama: "ARINI FAUZIAH", defisit: 10000 },
+            { nama: "CAHYA MAULIDYA", defisit: 0 },
+            { nama: "DEWI YANAH", defisit: 4000 },
+            { nama: "ELSA KEMALIA PUTRI", defisit: 2000 },
+            { nama: "ENCIH NURAENI", defisit: 0 },
+            { nama: "GALUH LAILY AGUSTIN", defisit: 6000 },
+            { nama: "IIN FADILAH", defisit: 8000 },
+            { nama: "INE SAGITA", defisit: 8000 },
+            { nama: "INTAN RAHMA", defisit: 0 },
+            { nama: "KHAIRUNNISA AZRA AMALINA", defisit: 14000 },
+            { nama: "M. FAHRI DARMAWAN", defisit: 8000 },
+            { nama: "MAULIDA AWWALIYA", defisit: 8000 },
+            { nama: "MELFA NUR RAHMADANI", defisit: 0 },
+            { nama: "META APRILLIA", defisit: 8000 },
+            { nama: "MUHAMAD AHYUDIN", defisit: 0 },
+            { nama: "NAZMI LAILA GITA", defisit: 12000 },
+            { nama: "NUR SAHLAMI", defisit: 0 },
+            { nama: "RAHMAWATI DWI NURHASANAH", defisit: 6000 },
+            { nama: "RENDI ANDRIAN", defisit: 0 },
+            { nama: "REVA PAULINA DJODI", defisit: 0 },
+            { nama: "RIZKI RIZALDI", defisit: 0 },
+            { nama: "ROHMAN", defisit: 0 },
+            { nama: "SITI ASYIAH", defisit: 2000 },
+            { nama: "SITI FIYANI ISTNIYATISITI", defisit: 2000 },
+            { nama: "SITI NABILA RAHMAH", defisit: 0 },
+            { nama: "SITI NAFISA AULIA", defisit: 10000 }
+        ];
+
+        const select = document.getElementById('pilihNama');
+
+        // Mengisi dropdown otomatis (urut abjad)
+        dataMhs.sort((a,b) => a.nama.localeCompare(b.nama)).forEach((m, i) => {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.text = m.nama;
+            select.appendChild(opt);
+        });
+
+        function cekTagihan() {
+            const idx = select.value;
+            const res = document.getElementById('hasil');
+
+            if(idx === "") {
+                res.innerHTML = "<p style='margin-top:20px; color:#94a3b8;'>Silakan pilih nama dulu.</p>";
+                return;
+            }
+
+            const p = dataMhs[idx];
+            if(p.defisit === 0) {
+                res.innerHTML = `
+                    <div class="card lunas">
+                        <div class="nama-mhs">${p.nama}</div>
+                        <h2>LUNAS ✅</h2>
+                        <p>Status pembayaran sudah lengkap.</p>
+                    </div>`;
+            } else {
+                res.innerHTML = `
+                    <div class="card tagihan">
+                        <div class="nama-mhs">${p.nama}</div>
+                        <h2>Rp ${p.defisit.toLocaleString('id-ID')}</h2>
+                        <p>Status: Belum Lunas ⚠️</p>
+                    </div>`;
+            }
+        }
+    </script>
+</body>
+</html>
