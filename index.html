@@ -3,72 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tagihan Kas BK</title>
+    <title>Dashboard Kas BK 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #3b82f6; --success: #10b981; --danger: #ef4444; }
-        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 400px; border-radius: 24px; padding: 30px; text-align: center; }
-        h1 { color: #38bdf8; font-size: 22px; margin-bottom: 5px; font-weight: 800; }
-        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
-        select, .btn { width: 100%; padding: 14px; border-radius: 12px; margin-bottom: 12px; font-size: 16px; transition: 0.3s; box-sizing: border-box; }
-        select { background: #1e293b; color: white; border: 1px solid #334155; }
-        .btn-cek { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; }
-        .btn-wa { background: #25d366; color: white; text-decoration: none; display: none; align-items: center; justify-content: center; font-weight: 700; }
-        .info-bank { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 15px; margin-top: 20px; font-size: 13px; text-align: left; }
-        .bank-name { color: #facc15; font-weight: 800; display: block; margin-bottom: 5px; }
-        .res { margin-top: 20px; padding: 20px; border-radius: 16px; animation: pop 0.3s; display: none; }
+        :root { 
+            --bg: #0b1120;
+            --card: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body { 
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, #1e293b, #0b1120);
+            color: white; display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; padding: 20px;
+        }
+        .container { 
+            background: var(--card); backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            width: 100%; max-width: 420px; border-radius: 28px; 
+            padding: 40px 30px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        h1 { font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; color: var(--accent); }
+        .sub { font-size: 14px; color: #94a3b8; margin-bottom: 30px; }
+        select { 
+            width: 100%; padding: 16px; border-radius: 14px; background: #1e293b; 
+            color: white; border: 1px solid #334155; font-size: 16px; margin-bottom: 15px;
+            cursor: pointer; appearance: none;
+        }
+        button.btn-cek { 
+            width: 100%; padding: 16px; border-radius: 14px; background: var(--accent); 
+            color: #0b1120; border: none; font-weight: 800; font-size: 16px; cursor: pointer;
+            transition: 0.3s ease;
+        }
+        button.btn-cek:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3); }
+        
+        /* Box Hasil */
+        .res-box { 
+            margin-top: 25px; padding: 20px; border-radius: 20px; display: none; 
+            animation: slideUp 0.4s ease forwards;
+        }
         .lunas { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); color: #6ee7b7; }
-        .proses { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: #fca5a5; margin-bottom: 15px; }
-        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .tagihan { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: #fca5a5; }
+
+        /* Tombol WA */
+        .btn-wa { 
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 100%; padding: 14px; margin-top: 15px; border-radius: 12px;
+            background: #25d366; color: white; text-decoration: none; font-weight: 700; font-size: 14px;
+        }
+
+        /* Info Bank & Copy */
+        .bank-card { 
+            margin-top: 35px; padding: 18px; background: rgba(15, 23, 42, 0.5); 
+            border-radius: 18px; border: 1px dashed rgba(255,255,255,0.2); text-align: left;
+        }
+        .bank-label { font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight: 800; }
+        .rekening-wrapper { 
+            display: flex; justify-content: space-between; align-items: center; margin-top: 8px;
+        }
+        .rekening-num { font-family: monospace; font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+        .copy-btn { 
+            background: rgba(56, 189, 248, 0.1); color: var(--accent); border: none;
+            padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+        }
+        .copy-btn:active { transform: scale(0.9); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="glass-card">
-        <h1>🎓 KAS JURUSAN BK</h1>
-        <p class="subtitle">Sistem Informasi Transparansi Kas</p>
-        
-        <select id="pilihNama"><option value="">-- Pilih Namamu --</option></select>
-        <button class="btn btn-cek" onclick="cek()">LIHAT STATUS</button>
-        
-        <div id="hasil" class="res"></div>
-        <a id="btnWa" href="https://wa.me/6283841495405?text=Halo%20Bendahara,%20saya%20ingin%20konfirmasi%20pembayaran%20kas" target="_blank" class="btn btn-wa">HUBUNGI BENDAHARA (WA)</a>
 
-        <div class="info-bank">
-            <span class="bank-name">🏦 SEABANK INDONESIA</span>
-            No. Rekening: <b>901268634684</b><br>
-            A.n: Bendahara BK
-        </div>
+<div class="container">
+    <h1>🎓 KAS BK</h1>
+    <div class="sub">Manajemen Transparansi Keuangan Jurusan</div>
+
+    <select id="pilihNama"><option value="">Pilih Nama Mahasiswa</option></select>
+    <button class="btn-cek" onclick="cek()">LIHAT TAGIHAN</button>
+
+    <div id="boxHasil" class="res-box">
+        <div id="txtNama" style="font-size: 12px; opacity: 0.7; text-transform: uppercase; margin-bottom: 5px;"></div>
+        <div id="txtStatus" style="font-size: 26px; font-weight: 800;"></div>
+        <div id="txtPesan" style="font-size: 13px; margin-top: 5px;"></div>
+        <a id="btnWa" href="https://wa.me/6283841495405?text=Halo%20Bendahara,%20saya%20ingin%20bayar%20kas" target="_blank" class="btn-wa">Kirim Bukti Bayar (WA)</a>
     </div>
 
-    <script>
-        const data = [
-            {n:"ABDUL FATAH",d:6000},{n:"ADIT SHAPRIZAL",d:6000},{n:"AFRILIA NUR FADHILA",d:2000},{n:"ALIYA FEBRIYANTI",d:8000},{n:"ARINADIHHAQ MUARIFIN",d:12000},{n:"ARINI FAUZIAH",d:10000},{n:"CAHYA MAULIDYA",d:0},{n:"DEWI YANAH",d:4000},{n:"ELSA KEMALIA PUTRI",d:2000},{n:"ENCIH NURAENI",d:0},{n:"GALUH LAILY AGUSTIN",d:6000},{n:"IIN FADILAH",d:8000},{n:"INE SAGITA",d:8000},{n:"INTAN RAHMA",d:0},{n:"KHAIRUNNISA AZRA AMALINA",d:14000},{n:"M. FAHRI DARMAWAN",d:8000},{n:"MAULIDA AWWALIYA",d:8000},{n:"MELFA NUR RAHMADANI",d:0},{n:"META APRILLIA",d:8000},{n:"MUHAMAD AHYUDIN",d:0},{n:"NAZMI LAILA GITA",d:12000},{n:"NUR SAHLAMI",d:0},{n:"RAHMAWATI DWI NURHASANAH",d:6000},{n:"RENDI ANDRIAN",d:0},{n:"REVA PAULINA DJODI",d:0},{n:"RIZKI RIZALDI",d:0},{n:"ROHMAN",d:0},{n:"SITI ASYIAH",d:2000},{n:"SITI FIYANI ISTNIYATISITI",d:2000},{n:"SITI NABILA RAHMAH",d:0},{n:"SITI NAFISA AULIA",d:10000}
-        ];
-        const s = document.getElementById('pilihNama');
-        data.sort((a,b)=>a.n.localeCompare(b.n)).forEach((m,i)=>{
-            let o=document.createElement('option'); o.value=i; o.text=m.n; s.appendChild(o);
-        });
-        function cek(){
-            const v=s.value; const h=document.getElementById('hasil'); const w=document.getElementById('btnWa');
-            if(!v) return; const p=data[v];
-            h.style.display = 'block';
-            if(p.d===0) {
-                h.className = 'res lunas';
-                h.innerHTML=`<b>${p.n}</b><h2>LUNAS ✅</h2>`;
-                w.style.display = 'none';
-            } else {
-                h.className = 'res proses';
-                h.innerHTML=`<b>${p.n}</b><h2>Rp ${p.d.toLocaleString()}</h2><p>Segera dilunasi ya!</p>`;
-                w.style.display = 'flex';
-            }
+    <div class="bank-card">
+        <div class="bank-label">Metode Pembayaran (SeaBank)</div>
+        <div class="rekening-wrapper">
+            <span class="rekening-num" id="rekening">901268634684</span>
+            <button class="copy-btn" onclick="salinRekening()">SALIN</button>
+        </div>
+        <div style="font-size: 12px; margin-top: 8px; color: #94a3b8;">A.n: Bendahara BK</div>
+    </div>
+</div>
+
+<script>
+    const data = [
+        {n:"ABDUL FATAH",d:6000},{n:"ADIT SHAPRIZAL",d:6000},{n:"AFRILIA NUR FADHILA",d:2000},{n:"ALIYA FEBRIYANTI",d:8000},{n:"ARINADIHHAQ MUARIFIN",d:12000},{n:"ARINI FAUZIAH",d:10000},{n:"CAHYA MAULIDYA",d:0},{n:"DEWI YANAH",d:4000},{n:"ELSA KEMALIA PUTRI",d:2000},{n:"ENCIH NURAENI",d:0},{n:"GALUH LAILY AGUSTIN",d:6000},{n:"IIN FADILAH",d:8000},{n:"INE SAGITA",d:8000},{n:"INTAN RAHMA",d:0},{n:"KHAIRUNNISA AZRA AMALINA",d:14000},{n:"M. FAHRI DARMAWAN",d:8000},{n:"MAULIDA AWWALIYA",d:8000},{n:"MELFA NUR RAHMADANI",d:0},{n:"META APRILLIA",d:8000},{n:"MUHAMAD AHYUDIN",d:0},{n:"NAZMI LAILA GITA",d:12000},{n:"NUR SAHLAMI",d:0},{n:"RAHMAWATI DWI NURHASANAH",d:6000},{n:"RENDI ANDRIAN",d:0},{n:"REVA PAULINA DJODI",d:0},{n:"RIZKI RIZALDI",d:0},{n:"ROHMAN",d:0},{n:"SITI ASYIAH",d:2000},{n:"SITI FIYANI ISTNIYATISITI",d:2000},{n:"SITI NABILA RAHMAH",d:0},{n:"SITI NAFISA AULIA",d:10000}
+    ];
+
+    const sel = document.getElementById('pilihNama');
+    data.sort((a,b)=>a.n.localeCompare(b.n)).forEach((m,i)=>{
+        let o=document.createElement('option'); o.value=i; o.text=m.n; sel.appendChild(o);
+    });
+
+    function cek(){
+        const v=sel.value; const box=document.getElementById('boxHasil');
+        if(!v) return;
+        const p=data[v];
+        box.style.display = 'block';
+        document.getElementById('txtNama').innerText = p.n;
+        const btnWa = document.getElementById('btnWa');
+
+        if(p.d===0){
+            box.className = 'res-box lunas';
+            document.getElementById('txtStatus').innerText = 'LUNAS ✅';
+            document.getElementById('txtPesan').innerText = 'Terima kasih, kamu sudah tertib!';
+            btnWa.style.display = 'none';
+        } else {
+            box.className = 'res-box tagihan';
+            document.getElementById('txtStatus').innerText = 'Rp ' + p.d.toLocaleString('id-ID');
+            document.getElementById('txtPesan').innerText = 'Silakan segera dilunasi ya.';
+            btnWa.style.display = 'inline-flex';
         }
-    </script>
+    }
+
+    function salinRekening() {
+        const rek = document.getElementById('rekening').innerText;
+        navigator.clipboard.writeText(rek);
+        const btn = document.querySelector('.copy-btn');
+        btn.innerText = 'TERSALIN!';
+        setTimeout(() => { btn.innerText = 'SALIN'; }, 2000);
+    }
+</script>
+
 </body>
 </html>
-        }
-    </script>
-</body>
-</html>
+
 
 
